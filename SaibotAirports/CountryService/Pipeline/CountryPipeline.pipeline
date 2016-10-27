@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/config" xmlns:con2="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con3="http://www.bea.com/wli/sb/stages/routing/config">
+    <con:coreEntry>
+        <con:binding type="SOAP" isSoap12="false" xsi:type="con:SoapBindingType">
+            <con:wsdl ref="CountryService/WSDLs/CountryService"/>
+            <con:binding>
+                <con:name>CountryServicePortTypeSOAP11Binding</con:name>
+                <con:namespace>saibot.airport/services/utility/reference</con:namespace>
+            </con:binding>
+        </con:binding>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:pipeline type="request" name="request-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc7">
+            <con:stage id="_StageId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc6" name="Stage1">
+                <con:context>
+                    <con1:userNsDecl prefix="ref" namespace="saibot.airport/services/utility/reference"/>
+                </con:context>
+                <con:actions>
+                    <con2:replace varName="body" contents-only="true">
+                        <con1:id>_ActionId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc5</con1:id>
+                        <con2:expr>
+                            <con1:xsltTransform>
+                                <con1:resource ref="CountryService/Transformations/createCountryRequestMessage"/>
+                                <con1:input>$body/*[1]</con1:input>
+                            </con1:xsltTransform>
+                        </con2:expr>
+                    </con2:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc4">
+            <con:stage id="_StageId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc3" name="Stage1">
+                <con:context>
+                    <con1:userNsDecl prefix="ref" namespace="saibot.airport/services/utility/reference"/>
+                </con:context>
+                <con:actions>
+                    <con2:replace varName="body" contents-only="true">
+                        <con1:id>_ActionId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc2</con1:id>
+                        <con2:expr>
+                            <con1:xsltTransform>
+                                <con1:resource ref="CountryService/Transformations/createCountryResponseMessage"/>
+                                <con1:input>$body/*[1]</con1:input>
+                            </con1:xsltTransform>
+                        </con2:expr>
+                    </con2:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="request" name="request-N6e99b693.N1cd79363.0.1580695fb49.N8000">
+            <con:stage id="_StageId-N6e99b693.N1cd79363.0.1580695fb49.N7ffe" name="Stage1">
+                <con:context>
+                    <con1:userNsDecl prefix="ref" namespace="saibot.airport/services/utility/reference"/>
+                </con:context>
+                <con:actions>
+                    <con2:replace varName="body" contents-only="true">
+                        <con1:id>_ActionId-N6e99b693.N1cd79363.0.1580695fb49.N7ff6</con1:id>
+                        <con2:expr>
+                            <con1:xsltTransform>
+                                <con1:resource ref="CountryService/Transformations/getCountryRequestMessage"/>
+                                <con1:input>$body/*[1]</con1:input>
+                            </con1:xsltTransform>
+                        </con2:expr>
+                    </con2:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-N6e99b693.N1cd79363.0.1580695fb49.N7fff">
+            <con:stage id="_StageId-N6e99b693.N1cd79363.0.1580695fb49.N7ffd" name="Stage1">
+                <con:context/>
+                <con:actions/>
+            </con:stage>
+        </con:pipeline>
+        <con:flow>
+            <con:branch-node type="operation" id="_FlowId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fd0" name="BranchNode1">
+                <con:context/>
+                <con:branch-table>
+                    <con:branch name="findCountries">
+                        <con:operator>equals</con:operator>
+                        <con:value/>
+                        <con:flow>
+                            <con:route-node name="RouteNode1">
+                                <con:context/>
+                                <con:actions>
+                                    <con3:route>
+                                        <con1:id>_ActionId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fb4</con1:id>
+                                        <con3:service ref="CountryService/Adapters/FindCountriesDB" xsi:type="ref:BusinessServiceRef" xmlns:ref="http://www.bea.com/wli/sb/reference"/>
+                                        <con3:operation>FindCountriesDBSelect</con3:operation>
+                                        <con3:outboundTransform/>
+                                        <con3:responseTransform/>
+                                    </con3:route>
+                                </con:actions>
+                            </con:route-node>
+                        </con:flow>
+                    </con:branch>
+                    <con:branch name="createCountry">
+                        <con:operator>equals</con:operator>
+                        <con:value/>
+                        <con:flow>
+                            <con:pipeline-node name="PipelinePairNode2">
+                                <con:request>request-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc7</con:request>
+                                <con:response>response-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fc4</con:response>
+                            </con:pipeline-node>
+                            <con:route-node name="RouteNode2" xmlns:con1="http://www.bea.com/wli/sb/stages/routing/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+                                <con:context/>
+                                <con:actions>
+                                    <con1:route>
+                                        <con2:id>_ActionId-N6e99b693.N1cd0253f.0.15805ebf4ee.N7fbf</con2:id>
+                                        <con1:service ref="CountryService/Adapters/CreateCountryDB" xsi:type="ref:BusinessServiceRef" xmlns:ref="http://www.bea.com/wli/sb/reference"/>
+                                        <con1:operation>insert</con1:operation>
+                                        <con1:outboundTransform/>
+                                        <con1:responseTransform/>
+                                    </con1:route>
+                                </con:actions>
+                            </con:route-node>
+                        </con:flow>
+                    </con:branch>
+                    <con:branch name="getCountryDetails">
+                        <con:operator>equals</con:operator>
+                        <con:value/>
+                        <con:flow>
+                            <con:pipeline-node name="PipelinePairNode1">
+                                <con:request>request-N6e99b693.N1cd79363.0.1580695fb49.N8000</con:request>
+                                <con:response>response-N6e99b693.N1cd79363.0.1580695fb49.N7fff</con:response>
+                            </con:pipeline-node>
+                            <con:route-node name="RouteNode3">
+                                <con:context/>
+                                <con:actions>
+                                    <con3:route>
+                                        <con1:id>_ActionId-N6e99b693.N1cd79363.0.1580695fb49.N7ff9</con1:id>
+                                        <con3:service ref="CountryService/Adapters/GetCountryDB" xsi:type="ref:BusinessServiceRef" xmlns:ref="http://www.bea.com/wli/sb/reference"/>
+                                        <con3:operation>selectByPrimaryKey</con3:operation>
+                                        <con3:outboundTransform/>
+                                        <con3:responseTransform/>
+                                    </con3:route>
+                                </con:actions>
+                            </con:route-node>
+                        </con:flow>
+                    </con:branch>
+                    <con:default-branch>
+                        <con:flow/>
+                    </con:default-branch>
+                </con:branch-table>
+            </con:branch-node>
+        </con:flow>
+        <con:partner-links/>
+    </con:router>
+</con:pipelineEntry>

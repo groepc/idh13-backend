@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+    <con:coreEntry>
+        <con:binding type="SOAP" isSoap12="false" xsi:type="con:SoapBindingType">
+            <con:wsdl ref="AirportService/WSDLs/AirportService"/>
+            <con:binding>
+                <con:name>ReferenceServicePortTypeSOAP11Binding</con:name>
+                <con:namespace>saibot.airport/services/utility/reference</con:namespace>
+            </con:binding>
+        </con:binding>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:pipeline type="request" name="request-N6e99bade.4a85f8ca.0.157e24c9b8d.N8000">
+            <con:stage id="_StageId-N6e99bade.4a85f8ca.0.157e24c9b8d.N7ffe" name="Stage1">
+                <con:context>
+                    <con2:userNsDecl prefix="ref" namespace="saibot.airport/services/utility/reference"/>
+                </con:context>
+                <con:actions>
+                    <con4:replace varName="body" contents-only="true" xmlns:con3="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con1="http://www.bea.com/wli/sb/stages/routing/config" xmlns:con4="http://www.bea.com/wli/sb/stages/transform/config">
+                        <con2:id>_ActionId-N6e99bade.Nc6cbdf1.0.157e21addbb.N7ffd</con2:id>
+                        <con3:expr>
+                            <con2:xsltTransform>
+                                <con2:resource ref="AirportService/Transformations/findAirportsRequestMessageToQueryAirportsDBInput"/>
+                                <con2:input>$body/*[1]</con2:input>
+                            </con2:xsltTransform>
+                        </con3:expr>
+                    </con4:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-N6e99bade.4a85f8ca.0.157e24c9b8d.N7fff">
+            <con:stage id="_StageId-N6e99bade.4a85f8ca.0.157e24c9b8d.N7ffd" name="Stage1">
+                <con:context>
+                    <con2:userNsDecl prefix="ref" namespace="saibot.airport/services/utility/reference"/>
+                </con:context>
+                <con:actions>
+                    <con4:replace varName="body" contents-only="true" xmlns:con3="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con1="http://www.bea.com/wli/sb/stages/routing/config" xmlns:con4="http://www.bea.com/wli/sb/stages/transform/config">
+                        <con2:id>_ActionId-N6e99bade.Nc6cbdf1.0.157e21addbb.N7ffa</con2:id>
+                        <con3:expr>
+                            <con2:xsltTransform>
+                                <con2:resource ref="AirportService/Transformations/QueryAirportsDBOutputToFindAirportsResponseMessage"/>
+                                <con2:input>$body/*[1]</con2:input>
+                            </con2:xsltTransform>
+                        </con3:expr>
+                    </con4:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:flow>
+            <con:pipeline-node name="PipelinePairNode1">
+                <con:request>request-N6e99bade.4a85f8ca.0.157e24c9b8d.N8000</con:request>
+                <con:response>response-N6e99bade.4a85f8ca.0.157e24c9b8d.N7fff</con:response>
+            </con:pipeline-node>
+            <con:route-node name="RouteNode1" xmlns:con1="http://www.bea.com/wli/sb/stages/routing/config">
+                <con:context>
+                    <con2:userNsDecl prefix="ref" namespace="saibot.airport/services/utility/reference"/>
+                </con:context>
+                <con:actions>
+                    <con1:route>
+                        <con2:id>_ActionId-N6e99bade.Nc6cbdf1.0.157e21addbb.N8000</con2:id>
+                        <con1:service ref="AirportService/Adapters/QueryAirportsDB" xsi:type="ref:BusinessServiceRef" xmlns:ref="http://www.bea.com/wli/sb/reference"/>
+                        <con1:operation>QueryAirportsDBSelect</con1:operation>
+                        <con1:outboundTransform/>
+                        <con1:responseTransform/>
+                    </con1:route>
+                </con:actions>
+            </con:route-node>
+        </con:flow>
+    </con:router>
+</con:pipelineEntry>
