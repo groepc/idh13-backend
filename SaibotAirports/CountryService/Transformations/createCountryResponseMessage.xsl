@@ -35,7 +35,7 @@
   <xsl:template match="/">
     <tns:createCountryResponseMessage>
       <tns:resultCode>
-        <xsl:value-of select="/ns0:CmnCountriesCollection/ns0:CmnCountries/ns0:code"/>
+        <xsl:value-of select="/ns0:CmnCountriesCollection/ns0:CmnCountries/ns0:id"/>
       </tns:resultCode>
     </tns:createCountryResponseMessage>
   </xsl:template>
