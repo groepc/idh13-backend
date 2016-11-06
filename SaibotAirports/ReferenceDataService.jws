@@ -72,7 +72,7 @@
       </list>
    </hash>
    <hash n="oracle.sb.tooling.ide.core.internal.application.SbApplication">
-      <value n="configContextSessionName" v="OSB-IDE_build_1477579148631"/>
+      <value n="configContextSessionName" v="OSB-IDE_build_1478361593396"/>
       <value n="customizationFile"/>
       <value n="keystorefile"/>
       <value n="keystorepassword" v=""/>
